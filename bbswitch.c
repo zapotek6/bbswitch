@@ -375,12 +375,12 @@ static int bbswitch_pm_handler(struct notifier_block *nbp,
     return 0;
 }
 
-static struct file_operations bbswitch_fops = {
-    .open   = bbswitch_proc_open,
-    .read   = seq_read,
-    .write  = bbswitch_proc_write,
-    .llseek = seq_lseek,
-    .release= single_release
+static struct proc_ops bbswitch_proc_ops = {
+    .proc_open   = bbswitch_proc_open,
+    .proc_read   = seq_read,
+    .proc_write  = bbswitch_proc_write,
+    .proc_lseek = seq_lseek,
+    .proc_release= single_release
 };
 
 static struct notifier_block nb = {
@@ -457,7 +457,7 @@ static int __init bbswitch_init(void) {
         }
     }
 
-    acpi_entry = proc_create("bbswitch", 0664, acpi_root_dir, &bbswitch_fops);
+    acpi_entry = proc_create("bbswitch", 0664, acpi_root_dir, &bbswitch_proc_ops);
     if (acpi_entry == NULL) {
         pr_err("Couldn't create proc entry\n");
         return -ENOMEM;
